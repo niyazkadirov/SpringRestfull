@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,8 +24,8 @@ public class Book {
     private String annotation;
 
     @ManyToMany(mappedBy = "books")
-    @JsonManagedReference
-    private Set<Author> authors;
+//    @JsonManagedReference
+    private List<Author> authors;
 
     public Book() {
     }
@@ -68,11 +69,11 @@ public class Book {
         this.annotation = annotation;
     }
 
-    public Set<Author> getAuthors() {
+    public List<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Set<Author> authors) {
+    public void setAuthors(List<Author> authors) {
         this.authors = authors;
     }
 }

@@ -23,7 +23,7 @@ public class Author {
             name = "author_book",
             joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
-    @JsonBackReference
+//    @JsonBackReference
     private Set<Book> books;
 
     public Author() {
