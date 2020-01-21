@@ -2,11 +2,11 @@ package com.example.demo.service;
 
 import com.example.demo.dao.AuthorRepository;
 import com.example.demo.domain.Author;
+import com.example.demo.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthorService {
@@ -17,8 +17,9 @@ public class AuthorService {
     public AuthorService() {
     }
 
-    public Optional<Author> getAuthor(Long id) {
-        return authorRepository.findById(id);
+    public Author getAuthor(Long id) throws ResourceNotFoundException {
+        return authorRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Author not found for this id :: " + id));
     }
 
     public List<Author> getAllAuthor() {

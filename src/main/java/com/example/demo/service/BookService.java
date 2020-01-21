@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.DTO.BookDTO;
 import com.example.demo.dao.BookRepository;
 import com.example.demo.domain.Book;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,8 @@ public class BookService {
     public BookService() {
     }
 
-    public List<BookDTO> getBook(Long id) {
-        BookDTO bookDTO = new BookDTO();
-        return bookDTO.getBookDTOList(bookRepository.findById(id));
+    public Optional<Book> getBook(Long id) {
+        return this.bookRepository.findById(id);
     }
 
     public List<Book> getAllBook() {
