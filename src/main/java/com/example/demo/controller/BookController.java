@@ -63,7 +63,7 @@ public class BookController {
     @ApiOperation(value = "Update book", response = void.class)
     @ResponseBody
     public void updateBook(@PathVariable("id") Long id, @RequestBody Book book) {
-        this.bookService.updateBook(book);
+        this.bookService.updateBook(book, id);
     }
 
 

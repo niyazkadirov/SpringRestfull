@@ -30,7 +30,8 @@ public class AuthorService {
         return authorRepository.save(author);
     }
 
-    public void updateAuthor(Author author) {
+    public void updateAuthor(Author author, Long id) {
+        author.setId(id);
         authorRepository.save(author);
     }
 

@@ -31,7 +31,8 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public void updateBook(Book book) {
+    public void updateBook(Book book, Long id) {
+        book.setId(id);
         bookRepository.save(book);
     }
 

@@ -54,25 +54,25 @@ public class AuthorController {
     }
 
 
-    @RequestMapping(value = "{/id}",
+    @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT,
             consumes = {"application/json"},
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Update author", response = void.class)
     @ResponseBody
-    public void updateAuthor(@RequestBody Author author) {
-        this.authorService.updateAuthor(author);
+    public void updateAuthor(@PathVariable Long id, @RequestBody Author author) {
+        this.authorService.updateAuthor(author, id);
     }
 
 
-    @RequestMapping(value = "{/id}",
+    @RequestMapping(value = "/{id}",
             method = RequestMethod.DELETE,
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete author", response = void.class)
     @ResponseBody
-    public void deleteAuthor(@PathVariable("/id") Long id) {
+    public void deleteAuthor(@PathVariable("id") Long id) {
         this.authorService.deleteAuthor(id);
     }
 }
