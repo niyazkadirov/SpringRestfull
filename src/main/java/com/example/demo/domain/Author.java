@@ -5,13 +5,15 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Set;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Author {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "full_name")
@@ -20,14 +22,15 @@ public class Author {
     @Column(name = "date_of_birth")
     private LocalDateTime dob;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "author_book",
             joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
     private Set<Book> books;
 
-    public Author() {
+    private LocalDateTime convertToUtc(LocalDateTime time) {
+        return time.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.MIN).toLocalDateTime();
     }
 
     public Long getId() {
@@ -47,11 +50,11 @@ public class Author {
     }
 
     public LocalDateTime getDob() {
-        return dob;
+        return convertToUtc(dob);
     }
 
     public void setDob(LocalDateTime dob) {
-        this.dob = dob;
+        this.dob = convertToUtc(dob);
     }
 
     public Set<Book> getBooks() {

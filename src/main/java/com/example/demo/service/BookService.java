@@ -2,11 +2,11 @@ package com.example.demo.service;
 
 import com.example.demo.dao.BookRepository;
 import com.example.demo.domain.Book;
+import com.example.demo.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -18,20 +18,21 @@ public class BookService {
     public BookService() {
     }
 
-    public Optional<Book> getBook(Long id) {
-        return this.bookRepository.findById(id);
+    public Book getBook(Long id) throws ResourceNotFoundException {
+        return this.bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found for this id :: " + id));
     }
 
     public List<Book> getAllBook() {
         return bookRepository.findAll();
-
     }
 
-    public Book createBook(Book book) {
-        return bookRepository.save(book);
+    public void createBook(Book book) {
+        bookRepository.save(book);
     }
 
-    public void updateBook(Book book, Long id) {
+    public void updateBook(Book book, Long id) throws ResourceNotFoundException {
+        getBook(id);
         book.setId(id);
         bookRepository.save(book);
     }

@@ -25,7 +25,7 @@ public class AuthorController {
             method = RequestMethod.GET,
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get the author and his books", response = Optional.class)
+    @ApiOperation(value = "Получить автора по 'id' и его книги", response = Author.class)
     @ResponseBody
     public Author getAuthor(@PathVariable("id") Long id) throws ResourceNotFoundException {
         return this.authorService.getAuthor(id);
@@ -35,9 +35,9 @@ public class AuthorController {
             method = RequestMethod.GET,
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get all authors and his books", response = List.class)
+    @ApiOperation(value = "Получить всех авторов, и их книги", response = List.class)
     @ResponseBody
-    public List<Author> getAllAuthor() throws Exception {
+    public List<Author> getAllAuthor() {
         return this.authorService.getAllAuthor();
     }
 
@@ -46,8 +46,8 @@ public class AuthorController {
             method = RequestMethod.POST,
             consumes = {"application/json"},
             produces = {"application/json"})
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Create author", response = void.class)
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Создать автора")
     @ResponseBody
     public void createAuthor(@RequestBody Author author) {
         this.authorService.createAuthor(author);
@@ -59,9 +59,9 @@ public class AuthorController {
             consumes = {"application/json"},
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Update author", response = void.class)
+    @ApiOperation(value = "Обновить автора", response = void.class)
     @ResponseBody
-    public void updateAuthor(@PathVariable Long id, @RequestBody Author author) {
+    public void updateAuthor(@PathVariable Long id, @RequestBody Author author) throws ResourceNotFoundException {
         this.authorService.updateAuthor(author, id);
     }
 
@@ -70,9 +70,9 @@ public class AuthorController {
             method = RequestMethod.DELETE,
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Delete author", response = void.class)
+    @ApiOperation(value = "Удалить автора", response = void.class)
     @ResponseBody
-    public void deleteAuthor(@PathVariable("id") Long id) {
+    public void deleteAuthor(@PathVariable("id") Long id) throws ResourceNotFoundException {
         this.authorService.deleteAuthor(id);
     }
 }

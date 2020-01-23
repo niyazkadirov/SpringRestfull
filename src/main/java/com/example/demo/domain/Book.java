@@ -2,9 +2,13 @@ package com.example.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Set;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
@@ -12,7 +16,7 @@ import java.util.Set;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -24,17 +28,17 @@ public class Book {
     @Column(name = "annotation")
     private String annotation;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "books", cascade = CascadeType.ALL)
     private Set<Author> authors;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "oder_book",
-            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "oder_id", referencedColumnName = "id"))
-    private Set<Oder> oders;
+    @NotFound(
+            action = NotFoundAction.IGNORE)
+    @ManyToOne()
+    private Oder oder;
 
-    public Book() {
+
+    private LocalDateTime convertToUtc(LocalDateTime time) {
+        return time.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.MIN).toLocalDateTime();
     }
 
     public Long getId() {
@@ -54,11 +58,11 @@ public class Book {
     }
 
     public LocalDateTime getPublishedAt() {
-        return publishedAt;
+        return convertToUtc(publishedAt);
     }
 
     public void setPublishedAt(LocalDateTime publishedAt) {
-        this.publishedAt = publishedAt;
+        this.publishedAt = convertToUtc(publishedAt);
     }
 
     public String getAnnotation() {
@@ -77,11 +81,11 @@ public class Book {
         this.authors = authors;
     }
 
-    public Set<Oder> getOders() {
-        return oders;
+    public Oder getOder() {
+        return oder;
     }
 
-    public void setOders(Set<Oder> oders) {
-        this.oders = oders;
+    public void setOder(Oder oder) {
+        this.oder = oder;
     }
 }

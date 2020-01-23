@@ -19,24 +19,26 @@ public class AuthorService {
 
     public Author getAuthor(Long id) throws ResourceNotFoundException {
         return authorRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Author not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Author not found for this id :: " + id));
     }
 
     public List<Author> getAllAuthor() {
         return authorRepository.findAll();
     }
 
-    public Author createAuthor(Author author) {
-        return authorRepository.save(author);
+    public void createAuthor(Author author) {
+        authorRepository.save(author);
     }
 
-    public void updateAuthor(Author author, Long id) {
+    public void updateAuthor(Author author, Long id) throws ResourceNotFoundException {
+        getAuthor(id);
         author.setId(id);
         authorRepository.save(author);
     }
 
-    public void deleteAuthor(Long id) {
-        authorRepository.deleteById(id);
+    public void deleteAuthor(Long id) throws ResourceNotFoundException {
+        Author author = getAuthor(id);
+        authorRepository.deleteById(author.getId());
     }
 
 }
