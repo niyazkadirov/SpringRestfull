@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.DemoApplication;
+import com.example.demo.dao.BookRepository;
 import com.example.demo.domain.Author;
 import com.example.demo.domain.Book;
 import org.junit.Assert;
@@ -8,6 +9,7 @@ import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,12 @@ class AuthorControllerTest {
     @InjectMocks
     AuthorController controller;
 
+    @Mock
+    BookController bookController;
+
+    @Mock
+    AuthorController authorController;
+
     @Autowired
     WebApplicationContext context;
 
@@ -59,33 +67,15 @@ class AuthorControllerTest {
 
     @Test
     void getAuthor() {
-        Author author = restTemplate.getForObject(getRootUrl() + "/author/1", Author.class);
-        System.out.println(author.getFullName());
-        Assert.assertNotNull(author);
     }
 
     @Test
     void getAllAuthor() {
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/author",
-                HttpMethod.GET, entity, String.class);
-
-        Assert.assertNotNull(response.getBody());
-    }
+   }
 
     @Test
     void createAuthor() {
-        Set<Book> books = new HashSet<>();
-        Author author = new Author();
-        Mockito.when(author.setBooks(books)).thenReturn();
-        author.setDob(LocalDateTime.now());
-        author.setFullName("full name");
 
-        ResponseEntity<Author> postResponse = restTemplate.postForEntity(getRootUrl() + "/author", author, Author.class);
-        Assert.assertNotNull(postResponse);
-        Assert.assertNotNull(postResponse.getBody());
     }
 
     @Test
